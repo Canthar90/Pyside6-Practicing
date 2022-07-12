@@ -14,7 +14,6 @@ class AnotherWindow(QWidget):
         canvas = QtGui.QPixmap(400, 300)
         canvas.fill(Qt.white)
         self.label.setPixmap(canvas)
-        # layout.addWidget(self.label)
         layout.addWidget(self.label)
         self.setLayout(layout)
         self.draw_rectangles()
@@ -33,8 +32,46 @@ class AnotherWindow(QWidget):
         painter.end()
         self.label.setPixmap(canvas)
 
+        # painter.end()
+        # self.label.setPixmap(canvas)
+
+
+class ThirdWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        layout = QVBoxLayout()
+        self.label = QLabel()
+        canvas = QtGui.QPixmap(400, 300)
+        canvas.fill(Qt.white)
+        self.label.setPixmap(canvas)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+        self.draw_elipse()
+
+
+    def draw_elipse(self):
+        canvas = self.label.pixmap()
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(3)
+        pen.setColor(QtGui.QColor(204, 0, 0))
+        painter.setPen(pen)
+
+        painter.drawEllipse(10, 10, 100, 100)
+        painter.drawEllipse(10, 10, 150, 200)
+        painter.drawEllipse(10, 10, 200, 300)
+
+        painter.drawEllipse(QtCore.QPoint(200, 200), 10, 10)
+        painter.drawEllipse(QtCore.QPoint(200, 200), 15, 20)
+        painter.drawEllipse(QtCore.QPoint(200, 200), 20, 30)
+        painter.drawEllipse(QtCore.QPoint(200, 200), 25, 40)
+        painter.drawEllipse(QtCore.QPoint(200, 200), 30, 50)
+        painter.drawEllipse(QtCore.QPoint(200, 200), 35, 60)
+
         painter.end()
         self.label.setPixmap(canvas)
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -79,6 +116,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def new_windows(self):
         self.w = AnotherWindow()
         self.w.show()
+        self.w1 = ThirdWindow()
+        self.w1.show()
 
     
 
