@@ -34,6 +34,7 @@ class TekstWindow(QWidget):
         painter.setFont(font)
 
         painter.drawText(100, 100, "Hello There")
+        painter.drawText(200, 200, 100, 100, Qt.AlignHCenter, "Hello world")
         painter.end()
         self.label.setPixmap(canvas)
 
