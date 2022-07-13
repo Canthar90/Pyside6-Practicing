@@ -3,14 +3,32 @@ from PySide6.QtCore import Qt
 
 
 class _Bar(QtWidgets.QWidget):
+    clickedValue = QtCore.Signal(int)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, steps, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
         self.setSizePolicy(
             QtWidgets.QSizePolicy.MinimumExpanding,
             QtWidgets.QSizePolicy.MinimumExpanding
         )
+
+        if isinstance(steps, list):
+            #list of colours
+            self.n_steps = len(steps)
+            self.steps = steps
+
+        elif isinstance(steps, int):
+            # int number of bars, defaults to red
+            self.n_steps = steps
+            self.steps = ['red'] * steps
+
+        else:
+            raise TypeError('steps must be a list or int')
+
+        self._bar_solid_percent = 0.8
+        self._background_color = QtGui.QColor('black')
+        self._padding = 4.0
 
     def siezeHint(self):
         return QtCore.QSize(40,120)
@@ -19,31 +37,35 @@ class _Bar(QtWidgets.QWidget):
         painter = QtGui.QPainter(self)
 
         brush = QtGui.QBrush()
-        brush.setColor(QtGui.QColor('black'))
+        brush.setColor(self._background_color)
         brush.setStyle(Qt.SolidPattern)
         rect = QtCore.QRect(0, 0, painter.device().width(), painter.device().height())
         painter.fillRect(rect, brush)
 
+        # Get current state
         dial = self.parent()._dial
         vmin, vmax = dial.minimum(), dial.maximum()
         value = dial.value()
 
-        
-        padding = 5 
-        d_height = painter.device().height() - (padding * 2)
-        d_width = painter.device().width() - (padding * 2)
-        step_size = d_height / 8
-        bar_height = step_size * 0.5
-        bar_spacer = step_size * 0.2 /2
+        # Define our canvas
+        # padding = 5
+        d_height = painter.device().height() - (self._padding * 2)
+        d_width = painter.device().width() - (self._padding * 2)
+
+        # Draw the bars
+        step_size = d_height / self.n_steps
+        bar_height = step_size * self._bar_solid_percent
+        bar_spacer = step_size * (1 - self._bar_solid_percent) / 2
 
         pc = (value - vmin) / (vmax - vmin)
-        n_step_to_draw = int(pc * 8)
-        brush.setColor(QtGui.QColor('red'))
+        n_step_to_draw = int(pc * self.n_steps)
+        
 
         for n in range(n_step_to_draw):
+            brush.setColor(QtGui.QColor(self.steps[n]))
             rect = QtCore.QRect(
-                padding,
-                padding + d_height - ((1 + n) * step_size) + bar_spacer,
+                self._padding,
+                self._padding + d_height - ((1 + n) * step_size) + bar_spacer,
                 d_width,
                 bar_height
             )
@@ -64,7 +86,7 @@ class PowerBar(QtWidgets.QWidget):
         super(PowerBar, self).__init__(*args, **kwargs)
 
         layout = QtWidgets.QVBoxLayout()
-        self._bar = _Bar()
+        self._bar = _Bar(steps)
         layout.addWidget(self._bar)
 
         self._dial = QtWidgets.QDial()
