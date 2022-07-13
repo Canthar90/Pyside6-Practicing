@@ -17,11 +17,31 @@ class _Bar(QtWidgets.QWidget):
 
     def paintEvent(self, e):
         painter = QtGui.QPainter(self)
+
         brush = QtGui.QBrush()
         brush.setColor(QtGui.QColor('black'))
         brush.setStyle(Qt.SolidPattern)
         rect = QtCore.QRect(0, 0, painter.device().width(), painter.device().height())
         painter.fillRect(rect, brush)
+
+        dial = self.parent()._dial
+        vmin, vmax = dial.minimum(), dial.maximum()
+        value = dial.value()
+
+        pen = painter.pen()
+        pen.setColor(QtGui.QColor('red'))
+        painter.setPen(pen)
+
+        font = painter.font()
+        font.setFamily('Times')
+        font.setPointSize(18)
+        painter.setFont(font)
+
+        painter.drawText(25, 25, "{}-->{}<--{}".format(vmin, value, vmax))
+        painter.end()
+
+    def _trigger_refresh(self):
+        self.update()
 
 
 
@@ -41,3 +61,4 @@ class PowerBar(QtWidgets.QWidget):
         layout.addWidget(self._dial)
 
         self.setLayout(layout)
+        self._dial.valueChanged.connect(self._bar._trigger_refresh)
