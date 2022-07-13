@@ -5,6 +5,39 @@ from PySide6.QtCore import Qt
 from random import randint, choice
 
 
+class TekstWindow(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        layout = QVBoxLayout()
+        self.label = QLabel("Text Window")
+        canvas = QtGui.QPixmap(500, 400)
+        canvas.fill(Qt.white)
+        self.label.setPixmap(canvas)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+        self.draw_tekst()
+
+
+    def draw_tekst(self):
+        canvas = self.label.pixmap()
+        painter = QtGui.QPainter(canvas)
+        pen = QtGui.QPen()
+        pen.setWidth(1)
+        pen.setColor(QtGui.QColor('green'))
+        painter.setPen(pen)
+
+        font = QtGui.QFont()
+        font.setFamily('Times')
+        font.setBold(True)
+        font.setPointSize(40)
+        painter.setFont(font)
+
+        painter.drawText(100, 100, "Hello There")
+        painter.end()
+        self.label.setPixmap(canvas)
+
+
 class AnotherWindow(QWidget):
     def __init__(self):
         super().__init__()
@@ -118,6 +151,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.w.show()
         self.w1 = ThirdWindow()
         self.w1.show()
+        self.t = TekstWindow()
+        self.t.show()
 
     
 
