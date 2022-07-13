@@ -29,26 +29,15 @@ class _Bar(QtWidgets.QWidget):
         value = dial.value()
 
         
-
-        # pen = painter.pen()
-        # pen.setColor(QtGui.QColor('red'))
-        # painter.setPen(pen)
-
-        # font = painter.font()
-        # font.setFamily('Times')
-        # font.setPointSize(18)
-        # painter.setFont(font)
-
-        # painter.drawText(25, 25, "{}".format(n_step_to_draw))
         padding = 5 
         d_height = painter.device().height() - (padding * 2)
         d_width = painter.device().width() - (padding * 2)
-        step_size = d_height / 5
-        bar_height = step_size * 0.6
-        bar_spacer = step_size * 0.4 /2
+        step_size = d_height / 8
+        bar_height = step_size * 0.5
+        bar_spacer = step_size * 0.2 /2
 
         pc = (value - vmin) / (vmax - vmin)
-        n_step_to_draw = int(pc * 5)
+        n_step_to_draw = int(pc * 8)
         brush.setColor(QtGui.QColor('red'))
 
         for n in range(n_step_to_draw):
