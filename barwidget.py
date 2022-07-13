@@ -3,7 +3,27 @@ from PySide6.QtCore import Qt
 
 
 class _Bar(QtWidgets.QWidget):
-    pass
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        self.setSizePolicy(
+            QtWidgets.QSizePolicy.MinimumExpanding,
+            QtWidgets.QSizePolicy.MinimumExpanding
+        )
+
+    def siezeHint(self):
+        return QtCore.QSize(40,120)
+
+    def paintEvent(self, e):
+        painter = QtGui.QPainter(self)
+        brush = QtGui.QBrush()
+        brush.setColor(QtGui.QColor('black'))
+        brush.setStyle(Qt.SolidPattern)
+        rect = QtCore.QRect(0, 0, painter.device().width(), painter.device().height())
+        painter.fillRect(rect, brush)
+
+
 
 
 class PowerBar(QtWidgets.QWidget):
