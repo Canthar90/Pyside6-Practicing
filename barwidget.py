@@ -14,7 +14,7 @@ class _Bar(QtWidgets.QWidget):
         )
 
         if isinstance(steps, list):
-            #list of colours
+            # list of colours
             self.n_steps = len(steps)
             self.steps = steps
 
@@ -116,6 +116,7 @@ class PowerBar(QtWidgets.QWidget):
         self._bar.clickedValue.connect(self._dial.setValue)
 
     def __getattr__(self, name):
+        """Returns parameters for us in bar paretn"""
         if name in self.__dict__:
             return self[name]
 
