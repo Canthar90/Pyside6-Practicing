@@ -14,6 +14,8 @@ class CustomObject(QObject):
     def value(self,value):
         self._value = value
 
+
+        # emits signal when value is changed
         if value != self._value:
             self._value = value
             self.valueChanged.emit(value)
