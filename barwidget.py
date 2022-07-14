@@ -75,6 +75,25 @@ class _Bar(QtWidgets.QWidget):
     def _trigger_refresh(self):
         self.update()
 
+    
+
+    def _calculate_clicked_value(self, e):
+        parent = self.parent()
+        vmin, vmax = parent.minimum(), parent.maximum()
+        d_height = self.size().height() + (self._padding * 2)
+        step_size = d_height / self.n_steps
+        click_y = e.y() - self._padding - step_size / 2
+
+        pc = (d_height - click_y) / d_height
+        value = vmin + pc *(vmax - vmin)
+        self.clickedValue.emit(value)
+
+    def mouseMoveEvent(self, e):
+        self._calculate_clicked_value(e)
+
+    def mousePressEvent(self, e):
+        self._calculate_clicked_value(e)
+
 
 
 
@@ -94,3 +113,15 @@ class PowerBar(QtWidgets.QWidget):
 
         self.setLayout(layout)
         self._dial.valueChanged.connect(self._bar._trigger_refresh)
+        self._bar.clickedValue.connect(self._dial.setValue)
+
+    def __getattr__(self, name):
+        if name in self.__dict__:
+            return self[name]
+
+        try:
+            return getattr(self._dial, name)
+        except AttributeError:
+            raise AttributeError(
+          "'{}' object has no attribute '{}'".format(self.__class__.__name__, name)
+        )
