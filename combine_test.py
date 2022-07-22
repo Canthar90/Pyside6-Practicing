@@ -1,6 +1,14 @@
-from PySide6.QtWidgets import QApplication, QWidget, QVBoxLayout, QLabel, QGraphicsGridLayout, QGraphicsScene, QGraphicsWidget, QGridLayout
+from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QGridLayout
 from checkbox import AnimatedToggle
 from barwidget import PowerBar
+from state_printer_test import CheckStates
+from PySide6 import QtCore
+
+@QtCore.Slot()
+def checking():
+    print(main_toggle.isChecked())
+    print(secondary_toggle.isChecked())
+
 
 colors_3 = (["#5e4fa2", "#3288bd", "#66c2a5", "#abdda4", "#e6f598", "#ffffbf", "#fee08b", "#fdae61", "#f46d43", "#d53e4f", "#9e0142"])
 
@@ -16,20 +24,35 @@ secondary_toggle = AnimatedToggle(
 main_toggle.setFixedSize(main_toggle.sizeHint())
 secondary_toggle.setFixedSize(secondary_toggle.sizeHint())
 
+check_button = QPushButton("check varibles")
+check_button.setStyleSheet("""
+    background-color: #D49B54;
+    padding 20px;
+    font-size: 18px;
+    max-width: 120px;
+    height: 50px;
+    border-radius: 10px
+    """)
+check_button.clicked.connect(checking)
+
 
 speed_bar = PowerBar(colors_3)
 
 
 window.setLayout(QGridLayout())
-window.layout().addWidget(speed_bar, 0, 0, 5, 3)
+window.layout().addWidget(speed_bar, 0, 0, 11, 3)
 
-window.layout().addWidget(QLabel("Main Toggle"), 2, 4)
-window.layout().addWidget(main_toggle, 3, 4)
+window.layout().addWidget(QLabel("Main Toggle"), 9, 4)
+window.layout().addWidget(main_toggle, 10, 4)
 
-window.layout().addWidget(QLabel("Secondary Toggle"), 4, 4)
-window.layout().addWidget(secondary_toggle, 5, 4)
+window.layout().addWidget(QLabel("Secondary Toggle"), 11, 4)
+window.layout().addWidget(secondary_toggle, 12, 4)
 
+window.layout().addWidget(check_button, 12, 0)
+
+window.setGeometry(0, 0, 250, 450)
 main_toggle.stateChanged.connect(secondary_toggle.setChecked)
+
 
 window.show()
 app.exec()

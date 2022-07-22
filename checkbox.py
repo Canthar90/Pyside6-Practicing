@@ -64,6 +64,9 @@ class AnimatedToggle(QCheckBox):
     def hitButton(self, pos: QPoint):
         return self.contentsRect().contains(pos)
 
+    def isChecked(self) -> bool:
+        return super().isChecked()
+
     @Slot(int)
     def setup_animation(self, value):
         self.animation_group.stop()
