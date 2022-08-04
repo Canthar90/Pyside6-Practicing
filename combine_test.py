@@ -5,12 +5,17 @@ from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QGridL
 from checkbox import AnimatedToggle
 from barwidget import PowerBar
 from PySide6 import QtCore
+import asyncio
 
-@QtCore.Slot()
-def checking_power():
-    while True:
-        time.sleep(2)
-        print(speed_bar.value())
+
+# async def checking_power():
+#     while True:
+#         asyncio.sleep(10)
+#         # time.sleep(2)
+#         # await checnkpw()
+
+# async def py35_coro():
+#     print(speed_bar.value())
     
 @QtCore.Slot()    
 def checking():
@@ -67,11 +72,11 @@ main_toggle.stateChanged.connect(secondary_toggle.setChecked)
 
 window.show()
 
-if __name__ == '__main__':
-    x = Process(target=checking_power())
-    x.start()
-    x.join()
+# if __name__ == '__main__':
+#     x = Process(target=checking_power())
+#     x.start()
+#     x.join()
 app.exec()
-
+# asyncio.loop.create_task(checking_power())
 
 
