@@ -5,25 +5,46 @@ from checkbox import AnimatedToggle
 from barwidget import PowerBar
 from PySide6 import QtCore
 import threading
+import sys
 
 
 
 logging.basicConfig(level=logging.INFO)
 colors_3 = (["#5e4fa2", "#3288bd", "#66c2a5", "#abdda4", "#e6f598", "#ffffbf", "#fee08b", "#fdae61", "#f46d43", "#d53e4f", "#9e0142"])
 previous_value = 0
+is_it_the_end = False
 
-def cyclic_checking():
-    global previous_value
+def cyclic_checking() -> None:
+    
+    global previous_value, is_it_the_end
     t = threading.Timer(5.0, cyclic_checking)
     t.start()
-       
-    try:
+    
+    if not is_it_the_end:
         if previous_value != speed_bar.value():
             print(speed_bar.value())
             previous_value = speed_bar.value()
-        
-    except RuntimeError:
+    else:
         t.cancel()
+        sys.exit(1)
+
+       
+    # try:
+    #     if previous_value != speed_bar.value():
+    #         print(speed_bar.value())
+    #         previous_value = speed_bar.value()
+    #     else:
+    #         print(speed_bar in locals())
+    # except RuntimeError:
+    #     t.cancel()
+        
+        
+def escaping():
+    global is_it_the_end
+    print("escaping")
+    is_it_the_end = True
+    sys.exit()
+
     
 
 @QtCore.Slot()    
@@ -33,7 +54,8 @@ def checking():
     print(speed_bar.value())
     print(type(speed_bar.value()))
 
-app = QApplication([])
+app = QApplication(sys.argv)
+
 
 window = QWidget()
 
@@ -78,3 +100,4 @@ cyclic_checking()
 window.show()
 
 app.exec()
+app.aboutToQuit.connect(escaping())
