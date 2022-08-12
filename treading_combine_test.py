@@ -15,7 +15,7 @@ previous_value = 0
 is_it_the_end = False
 
 def cyclic_checking() -> None:
-    
+    """Cyclicly checking if there is any change in speed_bar every 10 seconds"""
     global previous_value, is_it_the_end
     t = threading.Timer(5.0, cyclic_checking)
     t.start()
@@ -28,18 +28,11 @@ def cyclic_checking() -> None:
         t.cancel()
         sys.exit(1)
 
-       
-    # try:
-    #     if previous_value != speed_bar.value():
-    #         print(speed_bar.value())
-    #         previous_value = speed_bar.value()
-    #     else:
-    #         print(speed_bar in locals())
-    # except RuntimeError:
-    #     t.cancel()
         
         
 def escaping():
+    """After exiting the window turning off the program and sets flag for terminating 
+    the cyclic_checking by seting flag"""
     global is_it_the_end
     print("escaping")
     is_it_the_end = True
@@ -54,12 +47,16 @@ def checking():
     print(speed_bar.value())
     print(type(speed_bar.value()))
 
-app = QApplication(sys.argv)
 
+# creating ouer application
+app = QApplication(sys.argv)
 
 window = QWidget()
 
+# creating main animateed toggle
 main_toggle = AnimatedToggle()
+
+# creating secondary toggle 
 secondary_toggle = AnimatedToggle(
     checked_color="#FFB000",
     pulse_checked_color="#44FFB000"
@@ -79,9 +76,10 @@ check_button.setStyleSheet("""
 
 check_button.clicked.connect(checking)
 
+# creating speed bar animated bar
 speed_bar = PowerBar(colors_3)
 
-
+# setting layouts of widgets (column, row, numbers of columns, numbers of rows)
 window.setLayout(QGridLayout())
 window.layout().addWidget(speed_bar, 0, 0, 11, 3)
 
@@ -94,6 +92,8 @@ window.layout().addWidget(secondary_toggle, 12, 4)
 window.layout().addWidget(check_button, 12, 0)
 
 window.setGeometry(0, 0, 250, 450)
+
+# this part connects the toggles making main toggle the boss 
 main_toggle.stateChanged.connect(secondary_toggle.setChecked)
 
 cyclic_checking()
